@@ -34,10 +34,10 @@ export GOOGLE_APPLICATION_CREDENTIALS=${KOKORO_GFILE_DIR}/service-account.json
 export PROJECT_ID=$(cat "${KOKORO_GFILE_DIR}/project-id.json")
 
 # Export variable to override api endpoint
-export API_ENDPOINT_OVERRIDE
+export API_ENDPOINT_OVERRIDE='https://storage-preprod-test-unified.googleusercontent.com'
 
 # Export variable to override api endpoint version
-export API_VERSION_OVERRIDE
+export API_VERSION_OVERRIDE='v1_preprod'
 
 # Remove old nox
 python3 -m pip uninstall --yes --quiet nox-automation
@@ -56,10 +56,11 @@ if [[ $KOKORO_BUILD_ARTIFACTS_SUBDIR = *"continuous"* ]]; then
   trap cleanup EXIT HUP
 fi
 
+python3 -m nox -s system
 # If NOX_SESSION is set, it only runs the specified session,
 # otherwise run all the sessions.
-if [[ -n "${NOX_SESSION:-}" ]]; then
-    python3 -m nox -s ${NOX_SESSION:-}
-else
-    python3 -m nox
-fi
+#if [[ -n "${NOX_SESSION:-}" ]]; then
+#    python3 -m nox -s ${NOX_SESSION:-}
+#else
+#    python3 -m nox
+#fi
